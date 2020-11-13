@@ -8,8 +8,8 @@ services:
     depends_on:
       - mongo_db
     volumes:
-      - ./dist:/usr/api_finance/dist
-      - ./package.json:/usr/api_finance/package.json
+      - ./dist:/usr/backend/dist
+      - ./package.json:/usr/backend/package.json
     ports:
       - "3000:3000"
     environment:
@@ -32,7 +32,7 @@ services:
     networks:
       - connect
     volumes:
-      - ./data:/data/db
+      - ./backend/data:/data/db
     ports: 
       - "27017:27017"
 
