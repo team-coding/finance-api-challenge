@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build":"cd ./backend && yarn build",
+    "install:all":"yarn && cd ./backend yarn",
     "start:backend":"cd ./backend && yarn start:prod"
   },
   "devDependencies": {
