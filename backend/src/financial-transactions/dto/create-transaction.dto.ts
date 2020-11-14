@@ -1,4 +1,6 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsNumberString, Max, MaxLength, Min } from "class-validator";
+import { IsEnum, IsIn, IsNotEmpty, IsNumber, IsNumberString, Max, MaxLength, Min } from "class-validator";
+import { TransactionCategory } from "../utils/transaction-category.enum";
+import { TransactionType } from "../utils/transaction-type.enum";
 
 export class CreateTransactionDto{
  
@@ -12,6 +14,13 @@ export class CreateTransactionDto{
  value: number;
  
  @IsNotEmpty()
+ @IsIn([
+  TransactionCategory.FUN,
+  TransactionCategory.HEALTH,
+  TransactionCategory.MARKET,
+  TransactionCategory.RECEIVE,
+  TransactionCategory.TRANSPORT
+ ])
  category: string;
  
  @IsNotEmpty()
@@ -38,6 +47,10 @@ export class CreateTransactionDto{
  yearMonthDay: string;
  
  @IsNotEmpty()
+ @IsIn([
+  TransactionType.NEGATIVE,
+  TransactionType.POSITIVE
+ ])
  type: string;
  
 }
