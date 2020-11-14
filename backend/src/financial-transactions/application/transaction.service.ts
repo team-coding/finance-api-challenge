@@ -1,20 +1,21 @@
 import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { InjectRepository } from "@nestjs/typeorm";
 import { CreateTransactionDto } from "../dto/create-transaction.dto";
-import { Transaction, TransactionDocument } from '../infra/transaction.schema';
+import { TransactionRepository } from "../infra/transaction.repository";
+import { TransactionEntity } from "../infra/transaction.entity";
+
 
 @Injectable()
 export class  TrasnsactionService {
- constructor(@InjectModel(Transaction.name) private transactionModel: Model<TransactionDocument>) { }
+ constructor(@InjectRepository(TransactionRepository) private repo: TransactionRepository) { }
  
- async findAllTransactions(dto: any): Promise<Transaction[]>{
-  const transactions = this.transactionModel.find({});
+ async findAllTransactions(dto: any): Promise<TransactionEntity[]>{
+  const transactions = this.repo.find({});
   return transactions;
  }
 
- async createTransaction(dto: CreateTransactionDto): Promise<Transaction>{
-  return (await this.transactionModel.create(dto)).save();
+ async createTransaction(dto: CreateTransactionDto): Promise<TransactionEntity>{
+  return (await this.repo.create(dto)).save();
  }
 
 }

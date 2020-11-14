@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateTransactionDto } from "../dto/create-transaction.dto";
-import { Transaction } from "../infra/transaction.schema";
+import { TransactionEntity } from "../infra/transaction.entity";
 import { TransactionTypeValidation } from "../pipes/transaction-type-validation.pipe";
 import { FilterTransactionDto } from "../dto/filter-transaction.dto";
 import { TrasnsactionService } from "./transaction.service";
 
 @Controller('transactions')
-export class transactionController{
+export class TransactionController{
  constructor(private transactionService: TrasnsactionService) { }
  
  
@@ -17,7 +17,7 @@ export class transactionController{
  
  @Post()
  @UsePipes(ValidationPipe)
- createTransaction(@Body('type', TransactionTypeValidation) createTransactionDto: CreateTransactionDto): Promise<Transaction> {
+ createTransaction(@Body('type', TransactionTypeValidation) createTransactionDto: CreateTransactionDto): Promise<TransactionEntity> {
   return this.transactionService.createTransaction(createTransactionDto)
   
  }
