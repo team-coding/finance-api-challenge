@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { TransactionCategory } from './transaction-category.enum';
 
 export type TransactionDocument = Transaction & Document;
 
@@ -12,7 +13,12 @@ export class Transaction {
  @Prop({max:99999, required:true})
  value: number;
  
- @Prop({ enum: ['JURIDICO', 'FINANCEIRO'], required:true})
+ @Prop({
+  enum: [
+   TransactionCategory.FUN, TransactionCategory.HEALTH,
+   TransactionCategory.MARKET, TransactionCategory.RECEIVE,
+   TransactionCategory.TRANSPORT
+ ], required:true})
  category: string;
  
  @Prop({max:2090, min:2000, required:true})
