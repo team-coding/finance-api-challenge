@@ -21,4 +21,6 @@ export const typeormConfig:TypeOrmModuleOptions = {
     synchronize: true,
     ssl: true,
     authSource: 'admin',
+    useNewUrlParser: true,
+    readPreferenceTags:['readWriteAnyDatabase@admin']
 };
