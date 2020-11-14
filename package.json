@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build":"cd ./backend && yarn build"
+    "build":"cd ./backend && yarn build",
+    "start:backend":"cd ./backend && yarn start:prod"
   },
   "devDependencies": {
     "git-commit-msg-linter": "^3.0.0"
