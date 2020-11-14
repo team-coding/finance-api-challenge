@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { TransactionCategory } from './transaction-category.enum';
+import { TransactionType } from './transaction-type.enum';
 
 export type TransactionDocument = Transaction & Document;
 
@@ -36,7 +37,10 @@ export class Transaction {
  @Prop({required:true})
  yearMonthDay: string;
  
- @Prop({enum:['-', '+'], required:true})
+  @Prop({
+    enum: [TransactionType.NEGATIVE,
+    TransactionType.POSITIVE], required: true
+  })
  type: string;
  
 }
