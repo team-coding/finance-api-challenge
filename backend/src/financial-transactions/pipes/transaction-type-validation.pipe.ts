@@ -1,5 +1,5 @@
 import { BadRequestException, PipeTransform } from "@nestjs/common";
-import { TransactionType } from '../transaction-type.enum';
+import { TransactionType } from '../utils/transaction-type.enum';
 
 export class TransactionTypeValidation implements PipeTransform {
 

@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { TransactionCategory } from './transaction-category.enum';
-import { TransactionType } from './transaction-type.enum';
+import { TransactionCategory } from '../utils/transaction-category.enum';
+import { TransactionType } from '../utils/transaction-type.enum';
 
 export type TransactionDocument = Transaction & Document;
 
