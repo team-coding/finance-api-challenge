@@ -2,7 +2,7 @@ import { IsIn, IsNotEmpty, IsNumber, Max, MaxLength, Min } from "class-validator
 import { TransactionCategory } from "../utils/transaction-category.enum";
 import { TransactionType } from "../utils/transaction-type.enum";
 
-export class CreateTransactionDto{
+export class UpdateTransactionDto{
  
  @IsNotEmpty()
  @MaxLength(250)

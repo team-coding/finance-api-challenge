@@ -9,7 +9,7 @@ export class FilterTransactionDto{
   TransactionCategory.MARKET, TransactionCategory.RECEIVE,
   TransactionCategory.TRANSPORT
  ])
- status: string
+ category: string
  
  @IsOptional()
  @IsIn([
