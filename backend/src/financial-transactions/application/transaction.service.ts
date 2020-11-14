@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateTransactionDto } from "../dto/create-transaction.dto";
 import { TransactionRepository } from "../infra/transaction.repository";
 import { TransactionEntity } from "../infra/transaction.entity";
 import { UpdateTransactionDto } from "../dto/update-transaction.dto";
+import { FilterTransactionDto } from "../dto/filter-transaction.dto";
 
 
 @Injectable()
@@ -14,8 +15,8 @@ export class TrasnsactionService {
   return await this.repo.findOneOrFail(id);
  }
  
- async findAllTransactions(dto: any): Promise<TransactionEntity[]> {
-  const transactions = this.repo.find({});
+ async findAllTransactions(dto: FilterTransactionDto): Promise<TransactionEntity[]> {
+  const transactions = this.repo.findWithFilter(dto);
   return transactions;
  }
  

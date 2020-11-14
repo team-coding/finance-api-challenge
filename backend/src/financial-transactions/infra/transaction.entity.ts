@@ -1,10 +1,11 @@
-import { BaseEntity, Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, Index, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @Entity()
 export class TransactionEntity extends BaseEntity{
   @ObjectIdColumn()
   id:ObjectID
   
+  @Index('$search', { unique: false , fulltext:true})
   @Column({nullable:false})
   description: string;
   
@@ -33,4 +34,3 @@ export class TransactionEntity extends BaseEntity{
   type: string;
   
 }
-

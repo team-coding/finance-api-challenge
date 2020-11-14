@@ -1,5 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, Like, Repository } from "typeorm";
+import { FilterTransactionDto } from "../dto/filter-transaction.dto";
 import { UpdateTransactionDto } from "../dto/update-transaction.dto";
 import{TransactionEntity} from './transaction.entity'
 
@@ -22,5 +23,38 @@ export class TransactionRepository extends Repository<TransactionEntity>{
   } catch(error) {
    throw new BadRequestException(error, error.message)
   }
+ }
+ 
+ async findWithFilter(filter: FilterTransactionDto) {
+  let { category = '', type = '', description } = filter;
+  
+  if (!description) {
+   if (!type && !category) {
+    return await this.find();
+   }
+   
+   if (!type && category) {
+    return await this.find({ category });
+   }
+   
+   type = (type === 'out') ? '-' : '+';
+   if (type && category) {
+    return await this.find({ type, category });
+   }
+   
+   if (type && !category) {
+    return await this.find({ type });
+   }
+  }
+  
+  return await this.find({
+   where: {
+    $text: {
+     $search:description,
+     $language: 'portuguese',
+     $caseSensitive: false
+    }
+   }
+  })
  }
 }
