@@ -1,28 +1,28 @@
 version: "3"
 services: 
   api: 
-    container_name: api_finance
+    container_name: finance_api
     build: .
-    image: api_finance
+    image: finance_api
     restart: always
     depends_on:
-      - mongo_db
+      - mongo_database
     volumes:
-      - ./dist:/usr/backend/dist
-      - ./package.json:/usr/backend/package.json
+      - ./backend/dist:/usr/backend/dist
+      - ./backend/package.json:/usr/backend/package.json
     ports:
       - "3000:3000"
     environment:
         PORT: 3000
-        MONGO_HOST: "mongodb://root:root@mongo_db:27017/financeDB"
+        MONGO_HOST: "mongodb://root:root@mongo_database:27017/financeDB"
     networks:
       - connect
     links:
-      - mongo_db
+      - mongo_database
     command: npm run start:prod
     
-  mongo_db:
-    container_name: mongo_db
+  mongo_database:
+    container_name: mongo_database
     image: mongo
     restart: always
     environment:

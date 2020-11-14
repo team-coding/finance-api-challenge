@@ -1,8 +1,8 @@
 {
+  "scripts": {
+    "build":"cd ./backend && yarn build"
+  },
   "devDependencies": {
     "git-commit-msg-linter": "^3.0.0"
-  },
-  "dependencies": {
-    "@nestjs/typeorm": "^7.1.4"
   }
 }

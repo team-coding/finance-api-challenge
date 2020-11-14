@@ -1,6 +1,7 @@
 FROM node:12
-WORKDIR /usr/src/api_finance
+WORKDIR /usr/src/finance_api
 # COPY package.json .
 # RUN npm install --only=prod
-# COPY ./dist ./dist
+RUN yarn build
+COPY ./backend/dist ./backend/dist
 EXPOSE 3000
