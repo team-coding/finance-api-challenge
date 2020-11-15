@@ -3,12 +3,12 @@
     "node": "^12"
   },
   "scripts": {
-    "build":"cd ./backend && yarn && cd ../ && yarn start",
-    "install:all":"yarn && cd ./backend yarn",
-    "start":"cd ./backend && yarn start:prod"
+    "build": "cd ./backend && yarn && yarn build && cd ../ && yarn start",
+    "install:all": "yarn && cd ./backend yarn",
+    "start": "cd ./backend && yarn start:prod"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.8",
     "git-commit-msg-linter": "^3.0.0"
   }
- 
 }

@@ -1,1 +1,0 @@
-Web: env-cmd node ./dist/main.js
