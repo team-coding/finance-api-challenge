@@ -3,7 +3,7 @@
     "node": "^12"
   },
   "scripts": {
-    "build": "cd ./backend && yarn && yarn build && cd ../ && yarn start",
+    "build": "cd ./backend && yarn && cd ../ && yarn start",
     "install:all": "yarn && cd ./backend yarn",
     "start": "cd ./backend && yarn start:prod"
   },
