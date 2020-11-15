@@ -1,1 +1,1 @@
-Web: env-cmd node ./backend/dist/main.js
+Web: env-cmd node ./dist/main.js
