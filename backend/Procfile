@@ -1,0 +1,1 @@
+Web: env-cmd node ./backend/dist/main
