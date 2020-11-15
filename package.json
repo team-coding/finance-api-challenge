@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "^12"
+  },
   "scripts": {
     "build":"cd ./backend && yarn && yarn start:prod",
     "install:all":"yarn && cd ./backend yarn",
@@ -7,4 +10,5 @@
   "devDependencies": {
     "git-commit-msg-linter": "^3.0.0"
   }
+ 
 }
