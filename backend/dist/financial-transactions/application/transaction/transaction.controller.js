@@ -14,10 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionController = void 0;
 const common_1 = require("@nestjs/common");
-const create_transaction_dto_1 = require("../dto/create-transaction.dto");
-const filter_transaction_dto_1 = require("../dto/filter-transaction.dto");
+const create_transaction_dto_1 = require("../../dto/create-transaction.dto");
+const filter_transaction_dto_1 = require("../../dto/filter-transaction.dto");
 const transaction_service_1 = require("./transaction.service");
-const update_transaction_dto_1 = require("../dto/update-transaction.dto");
+const update_transaction_dto_1 = require("../../dto/update-transaction.dto");
 let TransactionController = class TransactionController {
     constructor(transactionService) {
         this.transactionService = transactionService;

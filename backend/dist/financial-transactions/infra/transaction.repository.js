@@ -30,32 +30,35 @@ let TransactionRepository = class TransactionRepository extends typeorm_1.Reposi
             throw new common_1.BadRequestException(error, error.message);
         }
     }
-    async findWithFilter(filter) {
-        let { category = '', type = '', description } = filter;
-        if (!description) {
-            if (!type && !category) {
-                return await this.find();
-            }
-            if (!type && category) {
-                return await this.find({ category });
-            }
-            type = (type === 'out') ? '-' : '+';
-            if (type && category) {
-                return await this.find({ type, category });
-            }
-            if (type && !category) {
-                return await this.find({ type });
-            }
-        }
-        return await this.find({
-            where: {
-                $text: {
-                    $search: description,
-                    $language: 'portuguese',
-                    $caseSensitive: false
+    async findWithFilter(filterDto) {
+        let { category = '', type = '', description, filter = '' } = filterDto;
+        if (!filter) {
+            if (!description) {
+                if (!type && !category) {
+                    return await this.find();
+                }
+                if (!type && category) {
+                    return await this.find({ category });
+                }
+                type = (type === 'out') ? '-' : '+';
+                if (type && category) {
+                    return await this.find({ type, category });
+                }
+                if (type && !category) {
+                    return await this.find({ type });
                 }
             }
-        });
+            return await this.find({
+                where: {
+                    $text: {
+                        $search: description,
+                        $language: 'portuguese',
+                        $caseSensitive: false
+                    }
+                }
+            });
+        }
+        return await this.find({ yearMonth: filter });
     }
 };
 TransactionRepository = __decorate([

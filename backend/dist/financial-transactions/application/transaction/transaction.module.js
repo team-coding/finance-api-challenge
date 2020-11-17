@@ -9,9 +9,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const transaction_repository_1 = require("../infra/transaction.repository");
-const transaction_controller_1 = require("./transaction.controller");
-const transaction_service_1 = require("./transaction.service");
+const transaction_repository_1 = require("../../infra/transaction.repository");
+const transaction_controller_1 = require("../transaction/transaction.controller");
+const transaction_service_1 = require("../transaction/transaction.service");
 let TransactionModule = class TransactionModule {
 };
 TransactionModule = __decorate([

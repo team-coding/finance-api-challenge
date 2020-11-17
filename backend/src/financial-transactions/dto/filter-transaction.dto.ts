@@ -1,6 +1,5 @@
-import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator"
-import { TransactionCategory } from "../utils/transaction-category.enum"
-import { TransactionType } from "../utils/transaction-type.enum"
+import { IsIn, IsOptional } from "class-validator";
+import { TransactionCategory } from "../utils/transaction-category.enum";
 
 export class FilterTransactionDto{
  @IsOptional()
@@ -17,4 +16,7 @@ export class FilterTransactionDto{
 
  @IsOptional()
  description: string
+
+ @IsOptional()
+ filter: string;
 }

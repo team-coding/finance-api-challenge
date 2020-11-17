@@ -1,8 +1,8 @@
-import { CreateTransactionDto } from "../dto/create-transaction.dto";
-import { TransactionRepository } from "../infra/transaction.repository";
-import { TransactionEntity } from "../infra/transaction.entity";
-import { UpdateTransactionDto } from "../dto/update-transaction.dto";
-import { FilterTransactionDto } from "../dto/filter-transaction.dto";
+import { CreateTransactionDto } from "../../dto/create-transaction.dto";
+import { TransactionRepository } from "../../infra/transaction.repository";
+import { TransactionEntity } from "../../infra/transaction.entity";
+import { UpdateTransactionDto } from "../../dto/update-transaction.dto";
+import { FilterTransactionDto } from "../../dto/filter-transaction.dto";
 export declare class TrasnsactionService {
     private repo;
     constructor(repo: TransactionRepository);

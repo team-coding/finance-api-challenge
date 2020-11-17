@@ -14,6 +14,7 @@ exports.typeormConfig = {
     useUnifiedTopology: true,
     entities: ['dist/**/*.entity.{ts,js}'],
     migrations: ['dist/**/migrations/**/*.{ts,js}'],
+    subscribers: ['dist/**/*.subscriber.{ts,js}'],
     cli: {
         entitiesDir: 'dist/infra/orms',
         migrationsDir: 'dist/infra/orms/migrations'

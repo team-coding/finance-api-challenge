@@ -6,22 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.AccountModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const typeorm_config_1 = require("./config/typeorm.config");
-const transaction_module_1 = require("./financial-transactions/application/transaction/transaction.module");
-const account_module_1 = require("./financial-transactions/application/balance/account.module");
-let AppModule = class AppModule {
+const account_repository_1 = require("../../infra/account.repository");
+const account_controller_1 = require("./account.controller");
+const account_service_1 = require("./account.service");
+let AccountModule = class AccountModule {
 };
-AppModule = __decorate([
+AccountModule = __decorate([
     common_1.Module({
-        imports: [
-            typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeormConfig),
-            transaction_module_1.TransactionModule,
-            account_module_1.AccountModule
-        ]
+        imports: [typeorm_1.TypeOrmModule.forFeature([account_repository_1.AccountRepository])],
+        controllers: [account_controller_1.AccountController],
+        providers: [account_service_1.AccountService]
     })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+], AccountModule);
+exports.AccountModule = AccountModule;
+//# sourceMappingURL=account.module.js.map

@@ -32,5 +32,9 @@ __decorate([
     class_validator_1.IsOptional(),
     __metadata("design:type", String)
 ], FilterTransactionDto.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsOptional(),
+    __metadata("design:type", String)
+], FilterTransactionDto.prototype, "filter", void 0);
 exports.FilterTransactionDto = FilterTransactionDto;
 //# sourceMappingURL=filter-transaction.dto.js.map
