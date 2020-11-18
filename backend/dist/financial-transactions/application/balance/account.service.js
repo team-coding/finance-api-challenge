@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const transaction_repository_1 = require("../../infra/transaction.repository");
+const transaction_repository_1 = require("src/financial-transactions/infra/transaction.repository");
 const typeorm_2 = require("typeorm");
 const account_repository_1 = require("../../infra/account.repository");
 let AccountService = class AccountService {
