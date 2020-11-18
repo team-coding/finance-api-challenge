@@ -18,8 +18,10 @@ let SaveTransactionEvent = class SaveTransactionEvent {
         return await account_service_1.AccountService.afterDeleteEvent(event.entity);
     }
     async afterInsert(event) {
-        console.log('CHAMOU O INSERT EVENTO');
         return await account_service_1.AccountService.afterSaveEvent(event.entity);
+    }
+    async beforeUpdate(event) {
+        return await account_service_1.AccountService.beforeupdateEvent(event.entity);
     }
 };
 SaveTransactionEvent = __decorate([

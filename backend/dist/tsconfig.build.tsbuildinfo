@@ -3192,7 +3192,7 @@
         "affectsGlobalScope": false
       },
       "../src/financial-transactions/application/balance/account.service.ts": {
-        "version": "3542acfe9da56248a68197f75f51c56fac4b97f6ccdcd335e940c266a4416b4c",
+        "version": "7481e80b9235cffbc9a49cf69d7816455627242cf5e5aa0b351da030f60e3eea",
         "signature": "9eed75b62883e1effe9482865dd2e3ab298aa70c3b6d8b546feb4acfa2efc15a",
         "affectsGlobalScope": false
       },
@@ -3984,7 +3984,7 @@
       "outDir": "./",
       "baseUrl": "..",
       "incremental": true,
-      "configFilePath": "../tsconfig.json"
+      "configFilePath": "../tsconfig.build.json"
     },
     "referencedMap": {
       "../node_modules/@babel/parser/typings/babel-parser.d.ts": [

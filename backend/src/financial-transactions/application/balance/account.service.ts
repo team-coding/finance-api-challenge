@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TransactionRepository } from 'src/financial-transactions/infra/transaction.repository';
 import { getCustomRepository } from 'typeorm';
 import { AccountEntity } from '../../infra/account.entity';
 import { AccountRepository } from '../../infra/account.repository';
@@ -17,24 +18,19 @@ export class AccountService {
   const repository = getCustomRepository(AccountRepository);
   let foundAccount:AccountEntity[] = await repository.getAccount()
   
-  console.log("CHAMOU O EVENTO NO SERVICE")
-  console.log(foundAccount)
-  console.log('RECEBEU UMA TRANSAÇÃO')
-  console.log(transaction)
-  
   if (foundAccount.length === 0) {
    foundAccount[0] = this.repo.create();
   }
-  
+  const account = foundAccount[0];
   if (transaction.type === '-') {
-   foundAccount[0].releases = 1 + foundAccount[0].releases;
-   foundAccount[0].outgoing = transaction.value + foundAccount[0].outgoing;
-   foundAccount[0].balance = foundAccount[0].balance - transaction.value;
+   account.releases += 1;
+   account.outgoing += transaction.value;
+   account.balance -= transaction.value;
   } else {
-   foundAccount[0].releases = 1 + foundAccount[0].releases;
-   foundAccount[0].income = transaction.value + foundAccount[0].income ;
-   foundAccount[0].balance += transaction.value + foundAccount[0].balance;
-  }
+   account.releases += 1;
+   account.income += transaction.value;
+   account.balance += transaction.value;
+  } 
   
   await foundAccount[0].save();
  }
@@ -57,12 +53,107 @@ export class AccountService {
    foundAccount.balance -= transaction.value;
   }
  }
-
+ 
+ async updateTransactionEvent(newTransaction: TransactionEntity): Promise<void>{
+  try {
+   const repository = getCustomRepository(AccountRepository);
+   const accounts = await repository.getAccount();
+   const account = accounts[0];
+   const transactionRepo = getCustomRepository(TransactionRepository);
+   const oldTransaction = await transactionRepo.findOne(newTransaction.id);
+   
+   if (!oldTransaction || !account) {
+    return;
+   }
+   
+   // Update on transaction 
+   if (newTransaction.type !== oldTransaction.type || newTransaction.value !== oldTransaction.value) {
+    // Case user update only type from - to +
+    if (newTransaction.type === '+' && newTransaction.type !== oldTransaction.type && newTransaction.value === oldTransaction.value) {
+     account.outgoing -= newTransaction.value;
+     account.income += newTransaction.value;
+     account.balance += newTransaction.value;
+     await account.save();
+     return;
+     // Case user update only type from + to -
+    } else if (newTransaction.type === '-' && newTransaction.type !== oldTransaction.type && newTransaction.value === oldTransaction.value) {
+     account.outgoing += newTransaction.value;
+     account.income -= newTransaction.value;
+     account.balance -= newTransaction.value;
+     await account.save();
+     return;
+     // Case user update only value
+    } else if (newTransaction.type === oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '+') {
+     
+     const isAdding = newTransaction.value > oldTransaction.value;
+     // Case user is adding more money
+     if (isAdding) {
+      const difference = (newTransaction.value - oldTransaction.value);
+      account.income += difference;
+      account.balance += difference;
+      await account.save();
+      return;
+     }
+     // Case user is removing money
+     const difference = (oldTransaction.value - newTransaction.value);
+     account.income -= difference;
+     account.balance += difference;
+     await account.save();
+     return;
+     
+    } else if (newTransaction.type === oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '-') {
+     //User is changing a negative transaction 
+     const isAdding = newTransaction.value > oldTransaction.value;
+     // Case user is adding more money
+     if (isAdding) {
+      const difference = (newTransaction.value - oldTransaction.value);
+      account.outgoing += difference;
+      account.balance -= difference;
+      await account.save();
+      return;
+     }
+     // Case user is removing money
+     const difference = (oldTransaction.value - newTransaction.value);
+     account.outgoing -= difference;
+     account.balance += difference;
+     await account.save();
+     return;
+     
+    }else if (newTransaction.type !== oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '-') {
+    
+     account.outgoing += newTransaction.value;
+     account.income -= oldTransaction.value;
+     account.balance -= oldTransaction.value;
+     account.balance += newTransaction.value;
+     await account.save();
+     return;
+     
+    } else if (newTransaction.type !== oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '+') {
+ 
+     account.outgoing -= oldTransaction.value;
+     account.income += newTransaction.value;
+     account.balance -= oldTransaction.value;
+     account.balance += newTransaction.value;
+     await account.save();
+     return;
+ 
+    }
+   } 
+  } catch (error) {
+   console.log(error);
+  }
+  
+ }
+ 
  public static async afterDeleteEvent(transaction:TransactionEntity):Promise<void> {
   await this.prototype.deleteTransactionEvent(transaction)
  }
-
+ 
  public static async afterSaveEvent(transaction:TransactionEntity):Promise<void> {
   await this.prototype.saveTransactionEvent(transaction)
+ }
+ 
+ public static async beforeupdateEvent(transaction:TransactionEntity):Promise<void> {
+  await this.prototype.updateTransactionEvent(transaction)
  }
 }

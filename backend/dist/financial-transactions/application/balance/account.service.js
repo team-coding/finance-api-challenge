@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const transaction_repository_1 = require("../../infra/transaction.repository");
 const typeorm_2 = require("typeorm");
 const account_repository_1 = require("../../infra/account.repository");
 let AccountService = class AccountService {
@@ -27,23 +28,19 @@ let AccountService = class AccountService {
     async saveTransactionEvent(transaction) {
         const repository = typeorm_2.getCustomRepository(account_repository_1.AccountRepository);
         let foundAccount = await repository.getAccount();
-        console.log("CHAMOU O EVENTO NO SERVICE");
-        console.log(foundAccount);
-        console.log('RECEBEU UMA TRANSAÇÃO');
-        console.log(transaction);
         if (foundAccount.length === 0) {
-            console.log('ENTROU NO CRIAR NOVA CONTA');
             foundAccount[0] = this.repo.create();
         }
+        const account = foundAccount[0];
         if (transaction.type === '-') {
-            foundAccount[0].releases = 1 + foundAccount[0].releases;
-            foundAccount[0].outgoing = transaction.value + foundAccount[0].outgoing;
-            foundAccount[0].balance = foundAccount[0].balance - transaction.value;
+            account.releases += 1;
+            account.outgoing += transaction.value;
+            account.balance -= transaction.value;
         }
         else {
-            foundAccount[0].releases = 1 + foundAccount[0].releases;
-            foundAccount[0].income = transaction.value + foundAccount[0].income;
-            foundAccount[0].balance += transaction.value + foundAccount[0].balance;
+            account.releases += 1;
+            account.income += transaction.value;
+            account.balance += transaction.value;
         }
         await foundAccount[0].save();
     }
@@ -65,11 +62,91 @@ let AccountService = class AccountService {
             foundAccount.balance -= transaction.value;
         }
     }
+    async updateTransactionEvent(newTransaction) {
+        try {
+            const repository = typeorm_2.getCustomRepository(account_repository_1.AccountRepository);
+            const accounts = await repository.getAccount();
+            const account = accounts[0];
+            const transactionRepo = typeorm_2.getCustomRepository(transaction_repository_1.TransactionRepository);
+            const oldTransaction = await transactionRepo.findOne(newTransaction.id);
+            if (!oldTransaction || !account) {
+                return;
+            }
+            if (newTransaction.type !== oldTransaction.type || newTransaction.value !== oldTransaction.value) {
+                if (newTransaction.type === '+' && newTransaction.type !== oldTransaction.type && newTransaction.value === oldTransaction.value) {
+                    account.outgoing -= newTransaction.value;
+                    account.income += newTransaction.value;
+                    account.balance += newTransaction.value;
+                    await account.save();
+                    return;
+                }
+                else if (newTransaction.type === '-' && newTransaction.type !== oldTransaction.type && newTransaction.value === oldTransaction.value) {
+                    account.outgoing += newTransaction.value;
+                    account.income -= newTransaction.value;
+                    account.balance -= newTransaction.value;
+                    await account.save();
+                    return;
+                }
+                else if (newTransaction.type === oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '+') {
+                    const isAdding = newTransaction.value > oldTransaction.value;
+                    if (isAdding) {
+                        const difference = (newTransaction.value - oldTransaction.value);
+                        account.income += difference;
+                        account.balance += difference;
+                        await account.save();
+                        return;
+                    }
+                    const difference = (oldTransaction.value - newTransaction.value);
+                    account.income -= difference;
+                    account.balance += difference;
+                    await account.save();
+                    return;
+                }
+                else if (newTransaction.type === oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '-') {
+                    const isAdding = newTransaction.value > oldTransaction.value;
+                    if (isAdding) {
+                        const difference = (newTransaction.value - oldTransaction.value);
+                        account.outgoing += difference;
+                        account.balance -= difference;
+                        await account.save();
+                        return;
+                    }
+                    const difference = (oldTransaction.value - newTransaction.value);
+                    account.outgoing -= difference;
+                    account.balance += difference;
+                    await account.save();
+                    return;
+                }
+                else if (newTransaction.type !== oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '-') {
+                    account.outgoing += newTransaction.value;
+                    account.income -= oldTransaction.value;
+                    account.balance -= oldTransaction.value;
+                    account.balance += newTransaction.value;
+                    await account.save();
+                    return;
+                }
+                else if (newTransaction.type !== oldTransaction.type && newTransaction.value !== oldTransaction.value && newTransaction.type === '+') {
+                    account.outgoing -= oldTransaction.value;
+                    account.income += newTransaction.value;
+                    account.balance -= oldTransaction.value;
+                    account.balance += newTransaction.value;
+                    await account.save();
+                    return;
+                }
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
     static async afterDeleteEvent(transaction) {
         await this.prototype.deleteTransactionEvent(transaction);
     }
     static async afterSaveEvent(transaction) {
         await this.prototype.saveTransactionEvent(transaction);
+    }
+    static async beforeupdateEvent(transaction) {
+        await this.prototype.updateTransactionEvent(transaction);
     }
 };
 AccountService = __decorate([

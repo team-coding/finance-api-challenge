@@ -7,6 +7,8 @@ export declare class AccountService {
     getAccount(): Promise<AccountEntity[]>;
     saveTransactionEvent(transaction: TransactionEntity): Promise<void>;
     deleteTransactionEvent(transaction: TransactionEntity): Promise<void>;
+    updateTransactionEvent(newTransaction: TransactionEntity): Promise<void>;
     static afterDeleteEvent(transaction: TransactionEntity): Promise<void>;
     static afterSaveEvent(transaction: TransactionEntity): Promise<void>;
+    static beforeupdateEvent(transaction: TransactionEntity): Promise<void>;
 }
