@@ -25,36 +25,39 @@ export class TransactionRepository extends Repository<TransactionEntity>{
   }
  }
  
- async findWithFilter(filter: FilterTransactionDto) {
-  let { category = '', type = '', description } = filter;
+ async findWithFilter(filterDto: FilterTransactionDto) {
+  let { category = '', type = '', description, filter = '' } = filterDto;
   
-  if (!description) {
-   if (!type && !category) {
-    return await this.find();
-   }
+  if (!filter) {
+   if (!description) {
+    if (!type && !category) {
+     return await this.find();
+    }
    
-   if (!type && category) {
-    return await this.find({ category });
-   }
+    if (!type && category) {
+     return await this.find({ category });
+    }
    
-   type = (type === 'out') ? '-' : '+';
-   if (type && category) {
-    return await this.find({ type, category });
-   }
+    type = (type === 'out') ? '-' : '+';
+    if (type && category) {
+     return await this.find({ type, category });
+    }
    
-   if (type && !category) {
-    return await this.find({ type });
-   }
-  }
-  
-  return await this.find({
-   where: {
-    $text: {
-     $search:description,
-     $language: 'portuguese',
-     $caseSensitive: false
+    if (type && !category) {
+     return await this.find({ type });
     }
    }
-  })
+  
+   return await this.find({
+    where: {
+     $text: {
+      $search: description,
+      $language: 'portuguese',
+      $caseSensitive: false
+     }
+    }
+   })
+  }
+  return await this.find({ yearMonth: filter });
  }
 }

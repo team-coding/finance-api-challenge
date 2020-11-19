@@ -1,10 +1,20 @@
 {
+  "engines": {
+    "node": "^14"
+  },
   "scripts": {
+<<<<<<< HEAD
     "build": "cd ./backend && yarn build",
     "install:all": "yarn && cd ./backend yarn",
     "start:backend": "cd ./backend && yarn start:prod"
+=======
+    "build": "cd ./backend && yarn && cd ../",
+    "install:all": "yarn && cd ./backend yarn",
+    "start": "cd ./backend && yarn start:prod"
+>>>>>>> 6a4b25e1f95433b9f72b0487a7589cd301d66f79
   },
   "devDependencies": {
+    "@types/cors": "^2.8.8",
     "git-commit-msg-linter": "^3.0.0"
   }
 }

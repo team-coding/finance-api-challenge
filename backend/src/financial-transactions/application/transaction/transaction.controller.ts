@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from "@nestjs/common";
-import { CreateTransactionDto } from "../dto/create-transaction.dto";
-import { TransactionEntity } from "../infra/transaction.entity";
-import { FilterTransactionDto } from "../dto/filter-transaction.dto";
+import { CreateTransactionDto } from "../../dto/create-transaction.dto";
+import { TransactionEntity } from "../../infra/transaction.entity";
+import { FilterTransactionDto } from "../../dto/filter-transaction.dto";
 import { TrasnsactionService } from "./transaction.service";
-import { UpdateTransactionDto } from "../dto/update-transaction.dto";
+import { UpdateTransactionDto } from "../../dto/update-transaction.dto";
 
 @Controller('/api/transactions')
 export class TransactionController{
