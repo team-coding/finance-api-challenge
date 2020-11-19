@@ -137,7 +137,7 @@ h2 {
 
 .filter-add-container {
   margin-top: 5px;
-  height: 60px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -147,20 +147,83 @@ h2 {
   font-family: 'Roboto', sans-serif;
 }
 
-.modal-content {
-  background-color: orange;
+.first-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+}
+.second-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 200%;
-  height: 200px;
+  height: 100px;
 }
 
-#type-expense {
+.calendar-picker {
   width: 150px;
-  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-modal {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#type-expense {
+  width: 250px;
 }
 
 #type-values-selector-1 {
-  width: 150px;
+  width: 250px;
 }
 #type-values-selector-2 {
-  width: 150px;
+  width: 250px;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 320px;
+}
+
+.type-movimentation-container {
+  width: 100%;
+  margin-right: 20px;
+}
+
+.type-transaction-container {
+  margin-right: 20px;
+}
+
+.description-container {
+  padding-top: 10px;
+}
+
+#input-lançamento {
+  margin-top: 40px;
+}
+
+.label-date {
+  font-size: 18px;
+  padding-bottom: 5px;
+}
+
+.add-values-row {
+  height: 100px;
 }
