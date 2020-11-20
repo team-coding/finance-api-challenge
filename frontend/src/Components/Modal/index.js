@@ -3,8 +3,9 @@ import M from 'materialize-css';
 import 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import DatePicker from 'react-date-picker';
+import ButtonJoker from '../Button-Joker';
+import CRUD from '../../Functions';
 import api from '../../Api';
-
 class Modal extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +22,12 @@ class Modal extends Component {
       year: '',
       yearMonth: '',
       yearMonthDay: '',
+      data: null,
     };
   }
   componentDidMount() {
+    CRUD.getTransactions();
+
     const options = {
       onOpenStart: () => {
         console.log('Open Start');
@@ -47,13 +51,8 @@ class Modal extends Component {
     M.Modal.init(this.Modal, options);
   }
 
-  // componentDidUpdate() {
-  //   console.log(this.state.indexSelector);
-  // }
   handleType = (index) => {
     this.setState({ indexSelector: index });
-    // <option value="0">Receita</option>
-    // <option value="1">Despesa</option>
     switch (index) {
       case '0': {
         this.setState({ type: '+', category: '1' });
@@ -97,15 +96,7 @@ class Modal extends Component {
     } else {
       switch (category) {
         case '1': {
-          this.setState({ category: 'Salário' });
-          break;
-        }
-        case '2': {
-          this.setState({ category: 'Investimento' });
-          break;
-        }
-        case '3': {
-          this.setState({ category: 'Freelance' });
+          this.setState({ category: 'Receita' });
           break;
         }
       }
@@ -118,9 +109,9 @@ class Modal extends Component {
       let date = dateFormat.split('/');
       let newDate = date.reverse().join('-');
       let yearMonth = newDate.slice(0, newDate.length - 3);
-      let year = parseInt(date[2]);
+      let day = parseInt(date[2]);
       let month = parseInt(date[1]);
-      let day = parseInt(date[0]);
+      let year = parseInt(date[0]);
       this.setState({
         year: year,
         month: month,
@@ -132,6 +123,8 @@ class Modal extends Component {
 
     this.setState({ dateValue: value });
   };
+
+  // const id = this.props.id;
 
   sendTransactionData = async () => {
     let data = {
@@ -145,39 +138,38 @@ class Modal extends Component {
       yearMonthDay: this.state.yearMonthDay,
       type: this.state.type,
     };
-    api
-      .post('/', data)
-      .then(async (response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err, ' Dados não puderam ser enviados');
-      });
-    //   {
-    //     "description":"Pão de Queijo",
-    //     "value":10,
-    //     "category":"Mercado",
-    //     "year":2020,
-    //     "month":10,
-    //     "day":14,
-    //     "yearMonth":"2020-10",
-    //     "yearMonthDay":"2020-10-14",
-    //     "type":"-"
-    // }
+
+    console.log('enviando');
+    if (this.props.mode === 'receive') {
+      CRUD.receive('', data);
+
+      this.props.setTransactions();
+    } else if (this.props.mode === 'update') {
+      CRUD.update(this.props.id, data);
+    }
   };
+
+  // () => transaction(id, data);
+  // api
+  //   .post('/', data)
+  //   .then(async (response) => {
+  //     console.log(response);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err, ' Dados não puderam ser enviados');
+  //   });
   render() {
-    // console.log(this.state.type);
-    // console.log(this.state.category);
+    const Button = this.props.Button;
     return (
       <>
-        <a
+        {/* <a
           id="filter-add"
           className="waves-effect waves-light btn modal-trigger"
           data-target="modal1"
         >
           NOVO LANÇAMENTO
-        </a>
-
+        </a> */}
+        <Button />
         <div
           ref={(Modal) => {
             this.Modal = Modal;
@@ -229,8 +221,6 @@ class Modal extends Component {
                     {this.state.indexType[this.state.indexSelector]}
                   </option>
                   <option value="1">Salário</option>
-                  <option value="2">Investimento</option>
-                  <option value="3">Freelance</option>
                 </select>
               )}
             </div>
@@ -273,12 +263,16 @@ class Modal extends Component {
             </div>
           </div>
           <div className="modal-footer">
-            <a
+            {/* <a
               onClick={() => this.sendTransactionData()}
               className="modal-close waves-effect waves-red btn-flat"
             >
               Adicionar
-            </a>
+            </a> */}
+            <ButtonJoker
+              mode={this.props.mode}
+              sendData={this.sendTransactionData}
+            />
             <a className="modal-close waves-effect waves-green btn-flat">
               Fechar
             </a>

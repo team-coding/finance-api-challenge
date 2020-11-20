@@ -227,3 +227,11 @@ h2 {
 .add-values-row {
   height: 100px;
 }
+
+.icon-edit:hover {
+  cursor: pointer;
+  color: gray;
+}
+.icon-edit:active {
+  color: gold;
+}

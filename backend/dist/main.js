@@ -9,7 +9,7 @@ async function bootstrap() {
     app.use(cors());
     app.use(body_parser_1.json());
     app.use(body_parser_1.urlencoded({ extended: true }));
-    await app.listen(process.env.PORT || 3000);
+    await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map
