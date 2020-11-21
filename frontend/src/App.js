@@ -12,7 +12,7 @@ function App() {
       const uniqueValues = [
         ...new Set(res.data.map((transaction) => transaction.yearMonth)),
       ];
-      // setTransactions(res.data);
+      setTransactions(res.data);
       // res.data.map((transaction) => {
       //   setTransactions(transaction);
       // });
@@ -58,18 +58,20 @@ function App() {
   const [cost, setCost] = useState(0);
   const [quantity, setQuantity] = useState(0);
   const [months, setMonths] = useState([]);
-  const [monthSelected, setMonthSelected] = useState('');
+  const [monthSelected, setMonthSelected] = useState(months[0]);
   const [options, setOpt] = useState(['', '1', '2', '3']);
   const [index, setIndex] = useState(0);
   const chooseIndex = (optionValue) => {
-    let position = index;
-    if (optionValue === 'raise' && index < options.length - 1) {
-      position += 1;
+    if (optionValue === 'raise') {
+      let actualMonth = months.findIndex(findMonth);
+      setMonthSelected(months[actualMonth + 1]);
     }
-    if (optionValue === 'decrease' && index > 0) {
-      position -= 1;
+    if (optionValue === 'decrease') {
+      let actualMonth = months.findIndex(findMonth);
+      console.log(months[actualMonth - 1], 'menos');
+      setMonthSelected(months[actualMonth - 1]);
     }
-    setIndex(position);
+
   };
 
   // const getPeriod = async (yearMonth) => {
@@ -85,9 +87,16 @@ function App() {
   //     });
   // };
 
+  function findMonth(month) {
+    return month === monthSelected
+  }
+
   const handleMonth = async (yearMonth) => {
     console.log(yearMonth);
     setMonthSelected(yearMonth);
+    let index = months.findIndex(findMonth)
+    // let index = months.findIndex(findMonth(monthSelected));
+    console.log(index);
     await api
       .get(`http://localhost:3001/api/transactions?period=${yearMonth}`)
       .then((res) => {
@@ -114,6 +123,18 @@ function App() {
   const setTransactionsComponent = (returnedTransactions) => {
     setTransactions(returnedTransactions);
   };
+
+  const sortFilter = (letter) => {
+    const value = letter;
+    let newValues = [];
+    if (value.length > 0) {
+      // const regex = new RegExp(`${value}`, 'i');
+      newValues = transactions.sort(function (a, b) {
+        return a.category.localeCompare(b.category);
+      });
+      setTransactions(newValues);
+    }
+  }
   const returnTransactions = () => {
     return (
       <div>
@@ -142,7 +163,7 @@ function App() {
             >
               {' '}
               <span style={{ fontSize: 30, fontFamily: 'Roboto Slab, serif ' }}>
-                {index < 10 ? `0${index + 1}` : index}
+                {index + 1}
               </span>
             </div>
             <div
@@ -278,7 +299,7 @@ function App() {
           <div className="values">
             <span className="label-value">Saldo:</span>
             <span id="saldo" className="value-text">
-              {profit}
+              {saldo}
             </span>
           </div>
         </div>
@@ -291,7 +312,7 @@ function App() {
             />
           </div>
           <div class="input-field col s10">
-            <input id="input-lançamento" type="text" className="validate" />
+            <input onChange={(e) => sortFilter(e.target.value)} id="input-lançamento" type="text" className="validate" />
             <label for="input-lançamento">Lançamento</label>
           </div>
         </div>
